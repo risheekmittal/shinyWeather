@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
+import 'package:clima/services/weather.dart';
+import 'package:flutter/services.dart';
 
 class LocationScreen extends StatefulWidget {
   LocationScreen({this.locationWeather});
@@ -11,20 +13,28 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-
+  WeatherModel weather = WeatherModel();
   double temperature;
-  int condition;
+  int temp;
+  Widget weatherIcon;
+  String weatherTxt;
   String city;
 
   @override
   void initState() {
     super.initState();
     updateUI(widget.locationWeather);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+    ));
   }
 
   void updateUI( dynamic weatherData){
     temperature = weatherData['main']['temp'];
-    condition = weatherData['weather'][0]['id'];
+    temp = temperature.toInt();
+    var condition = weatherData['weather'][0]['id'];
+    weatherIcon = weather.getWeatherIcon(condition);
+    weatherTxt = weather.getMessage(temp);
     city = weatherData['name'];
   }
 
@@ -34,7 +44,7 @@ class _LocationScreenState extends State<LocationScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/location_background.jpg'),
+            image: AssetImage('images/${weather.weatherText}'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
                 Colors.white.withOpacity(0.8), BlendMode.dstATop),
@@ -67,27 +77,32 @@ class _LocationScreenState extends State<LocationScreen> {
               ),
               Padding(
                 padding: EdgeInsets.only(left: 15.0),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      '${temperature.round()}°',
-                      style: kTempTextStyle,
-                    ),
-                    Text(
-                      '☀️',
-                      style: kConditionTextStyle,
-                    ),
-                  ],
-                ),
-              ),
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 200.0),
+                  child: Column(
+                    children: <Widget>[
+                      weatherIcon,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 35.0),
+                        child: Text(
+                          '$temp°',
+                          style: kTempTextStyle,
+                        ),
+                      ),
+              SizedBox(height: 100.0,),
               Padding(
-                padding: EdgeInsets.only(right: 15.0),
-                child: Text(
-                  "It's 🍦 time in San Francisco!",
-                  textAlign: TextAlign.right,
-                  style: kMessageTextStyle,
+                        padding: EdgeInsets.only(right: 15.0,),
+                        child: Text(
+                          weatherTxt,
+                          textAlign: TextAlign.center,
+                          style: kMessageTextStyle,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
+
             ],
           ),
         ),

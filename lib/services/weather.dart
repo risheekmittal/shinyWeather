@@ -1,21 +1,33 @@
+import 'package:flutter/cupertino.dart';
+
+
 class WeatherModel {
-  String getWeatherIcon(int condition) {
+  String weatherText;
+  Widget getWeatherIcon(int condition) {
     if (condition < 300) {
-      return '🌩';
+      weatherText = 'thunderbg.jpg';
+      return Image(image: AssetImage('images/thunder.png'),width: 150.0,);
     } else if (condition < 400) {
-      return '🌧';
+      weatherText = 'drizzlebg.jpg';
+      return Image(image: AssetImage('images/drizzle.png'),width: 150.0,);
     } else if (condition < 600) {
-      return '☔️';
+      weatherText = 'rainybg.jpg';
+      return Image(image: AssetImage('images/rainy.png'),width: 150.0,);
     } else if (condition < 700) {
-      return '☃️';
+      weatherText = 'snowbg.png';
+      return Image(image: AssetImage('images/snow.png'),width: 150.0,);
     } else if (condition < 800) {
-      return '🌫';
+      weatherText = 'windybg.png';
+      return Image(image: AssetImage('images/wind.png'),width: 150.0,);
     } else if (condition == 800) {
-      return '☀️';
+      weatherText = 'clearbg.jpg';
+      return Image(image: AssetImage('images/clear.png'),width: 150.0,);
     } else if (condition <= 804) {
-      return '☁️';
+      weatherText = 'cloudybg.jpg';
+      return Image(image: AssetImage('images/cloudy.png'),width: 150.0,);
     } else {
-      return '🤷‍';
+      weatherText = 'clear2bg.png';
+      return Image(image: AssetImage('images/clear.png'),width: 150.0,);
     }
   }
 
